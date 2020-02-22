@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <limits.h>
 
-int N = 0;
+int N = 10;
 
 long getVertexWithMinDistance(long dist[], bool pickedVertices[]) {
     long minDistance = LONG_MAX;
@@ -141,8 +141,6 @@ int main(int argc, char *argv[]) {
         for (int vertex = (rank - 1) * numOfTaskPerProcess; vertex < (rank - 1) * numOfTaskPerProcess + numOfTaskPerProcess; vertex++) {
             long* dataSend = dijkstra(graph, vertex);
             MPI_Send(dataSend, N, MPI_LONG, destinationRank, tag, MPI_COMM_WORLD);
-            // Possible bug
-            free(dataSend);
         }
     }
 
