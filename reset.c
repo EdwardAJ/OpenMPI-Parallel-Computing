@@ -6,8 +6,8 @@
 
 int N = 10;
 
-long getVertexWithMinDistance(long dist[], bool pickedVertices[]) {
-    long minDistance = LONG_MAX;
+int getVertexWithMinDistance(int dist[], bool pickedVertices[]) {
+    int minDistance = INT_MAX;
     int vertexWithMinDistance = -1;
 
     for (int vertex = 0; vertex < N; vertex++) {
@@ -20,27 +20,18 @@ long getVertexWithMinDistance(long dist[], bool pickedVertices[]) {
 }
 
 
-long* dijkstra(int graph[N][N], int sourceVertex) {
+void dijkstra(int graph[N][N], int sourceVertex) {
 
     // Distance from single source to all of the nodes
-    long *dist = (long*) malloc(sizeof(long) * N);
     bool pickedVertices[N];
 
     for (int vertex = 0; vertex < N; vertex++) {
-        if (vertex == sourceVertex) {
-            dist[vertex] = 0;
-        } else {
-            // Initialize all distance to be infinity.
-            dist[vertex] = LONG_MAX;
-        }
         pickedVertices[vertex] = false;
     }
 
-    dist[sourceVertex] = 0;
-
     for (int i = 0; i < N - 1; i++) {
         // Get minimum distance
-        int vertexWithMinDistance = getVertexWithMinDistance(dist, pickedVertices);
+        int vertexWithMinDistance = getVertexWithMinDistance(graph[i], pickedVertices);
 
         // Mark the vertice as picked
         pickedVertices[vertexWithMinDistance] = true;
@@ -49,17 +40,17 @@ long* dijkstra(int graph[N][N], int sourceVertex) {
         for (int vertex = 0; vertex < N; vertex++) {
             if ((!pickedVertices[vertex]) && 
                 (graph[vertexWithMinDistance][vertex]) && 
-                (dist[vertexWithMinDistance] != LONG_MAX) && 
-                (dist[vertexWithMinDistance] + graph[vertexWithMinDistance][vertex] < dist[vertex])) {
-                // Change dist[]
-                dist[vertex] = dist[vertexWithMinDistance] + graph[vertexWithMinDistance][vertex];
+                (graph[i][vertexWithMinDistance] + graph[vertexWithMinDistance][vertex] < graph[i][vertex])) {
+                
+                graph[i][vertex] = graph[i][vertexWithMinDistance] + graph[vertexWithMinDistance][vertex];
             }
         }
     }
-    return dist;
+    return;
 }
 
 int main(int argc, char *argv[]) {
+	int graph[N][N];
     int rank, numtasks;
     double start_time, end_time, total_time;
 	MPI_Status Stat;
@@ -68,7 +59,6 @@ int main(int argc, char *argv[]) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     start_time = MPI_Wtime();
 
-    int graph[N][N];
     srand(13517115);
 	// Fill the matrix with rand() function
     for (int i = 0; i < N; i++) {
@@ -93,6 +83,7 @@ int main(int argc, char *argv[]) {
     MPI_Finalize();
 
     if (rank == 0) {
+        MPI_Recv(&dataRecv, N, MPI_INT, MPI_ANY_SOURCE, tag, MPI_COMM_WORLD, &Stat);
     	printf("%f\n", total_time);
 	}
 

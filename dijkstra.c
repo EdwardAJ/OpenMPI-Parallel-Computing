@@ -140,7 +140,7 @@ int main(int argc, char *argv[]) {
     } else {
         for (int vertex = (rank - 1) * numOfTaskPerProcess; vertex < (rank - 1) * numOfTaskPerProcess + numOfTaskPerProcess; vertex++) {
             long* dataSend = dijkstra(graph, vertex);
-            MPI_Send(dataSend, N, MPI_LONG, destinationRank, tag, MPI_COMM_WORLD);
+            MPI_Send(dataSend, N, MPI_LONG, 0, tag, MPI_COMM_WORLD);
         }
     }
 
