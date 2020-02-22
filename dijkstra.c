@@ -49,10 +49,17 @@ void dijkstra(int graph[NUMBER_OF_VERTICES][NUMBER_OF_VERTICES], int sourceVerte
       }
     }
   }
+
+  // Edit the real graph
+  for (int vertex = 0; vertex < NUMBER_OF_VERTICES; vertex++) {
+    graph[sourceVertex][vertex] = dist[vertex];
+  }
+
   // Print solution
-    for (int vertex = 0; vertex < NUMBER_OF_VERTICES; vertex++) {
-      printf("%d to %ld\n", vertex, dist[vertex]);
-    }
+  for (int vertex = 0; vertex < NUMBER_OF_VERTICES; vertex++) {
+    // printf("%d to %ld\n", vertex, dist[vertex]);
+    printf("%d to %d\n", vertex, graph[sourceVertex][vertex]);
+  }
 }
 
 int main(int argc, char *argv[]) {
@@ -63,18 +70,23 @@ int main(int argc, char *argv[]) {
   // Initialize matrix
   int graph[NUMBER_OF_VERTICES][NUMBER_OF_VERTICES];
 
+  // Seed with NIM: Edward Alexander Jaya
+  srand(13517115);
   // Fill the matrix with rand() function
-  // for (int i = 0; i < NUMBER_OF_VERTICES; i++) {
-  //   for (int j = 0; j < NUMBER_OF_VERTICES; j++) {
-  //     graph[i][j] = rand();
-  //   }
-  // }
-
   for (int i = 0; i < NUMBER_OF_VERTICES; i++) {
     for (int j = 0; j < NUMBER_OF_VERTICES; j++) {
-      scanf("%d", &graph[i][j]);
+      // Mod by 100 so the result won't be too big.
+      graph[i][j] = rand() % 100;
     }
   }
+
+  // Test function
+  
+  // for (int i = 0; i < NUMBER_OF_VERTICES; i++) {
+  //   for (int j = 0; j < NUMBER_OF_VERTICES; j++) {
+  //     scanf("%d", &graph[i][j]);
+  //   }
+  // }
 
   // graph = { 0, 4, 0, 0, 0, 0, 0, 8, 0,
   //           4, 0, 8, 0, 0, 0, 0, 11, 0, 
@@ -86,9 +98,9 @@ int main(int argc, char *argv[]) {
   //           8, 11, 0, 0, 0, 0, 1, 0, 7, 
   //           0, 0, 2, 0, 0, 0, 6, 7, 0 };
 
-  // dijkstra(graph, 0); 
+  dijkstra(graph, 1); 
 
-  // // Print function
+  // Print function
   printf("Matrix: \n");
   for (int i = 0; i < NUMBER_OF_VERTICES; i++) {
     for (int j = 0; j < NUMBER_OF_VERTICES; j++) {
@@ -96,8 +108,9 @@ int main(int argc, char *argv[]) {
     }
     printf("\n");
   }
+
   // Send argument vector
-  // MPI_Init(&argc, &argv);
-  dijkstra(graph, 0); 
-  // MPI_Finalize();
+  MPI_Init(&argc, &argv);
+  // dijkstra(graph, 0); 
+  MPI_Finalize();
 } 
