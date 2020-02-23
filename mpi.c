@@ -4,10 +4,10 @@
 #include <stdlib.h>
 #include <limits.h>
 
-int N = 1000;
+int N = 0;
 
 int getmin_index(long **graph, bool pickedVertices[N], int sourceVertex) {
-    int minDistance = CHAR_MAX;
+    int minDistance = INT_MAX;
     int min_index = -1;
 
     for (int j = 0; j < N; j++) {
@@ -70,6 +70,7 @@ int main(int argc, char *argv[]) {
     {
         graph[i] = (long*) malloc(sizeof(long) * N);
     }
+
     int numtasks, rank, dest, source, rc, count, tag=1;
     double start_time, end_time, total_time;
 
@@ -77,10 +78,11 @@ int main(int argc, char *argv[]) {
 	// Fill the matrix with rand() function
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
-            // Mod by 100 so the result won't be too big.
-            graph[i][j] = rand() % 100;
+            graph[i][j] = rand();
         }
     }
+
+    // Assign with infinity
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             if (!(i == j || graph[i][j])){
@@ -96,6 +98,8 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    // print(graph);
+    
     MPI_Status Stat;
     MPI_Init(&argc,&argv);
     MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
@@ -109,36 +113,58 @@ int main(int argc, char *argv[]) {
     count = 0;
     if (!rank){
         dataRecv = (long*) malloc(sizeof(long) * N*jobs);
-        while(count<numtasks-1){
+        while ( count < numtasks-1 ){
             MPI_Recv(dataRecv, N*jobs, MPI_LONG, MPI_ANY_SOURCE, tag, MPI_COMM_WORLD, &Stat);
             printf("Received from process %d ", Stat.MPI_SOURCE);
-            for (int i = 0; i < N*jobs; ++i)
-            {
-                graph[Stat.MPI_SOURCE*jobs-jobs][i] = dataRecv[i];
+            for (int i = 0; i < jobs; ++i) {
+                for (int j = 0; j < N; ++j) {
+                    graph[Stat.MPI_SOURCE * jobs - jobs + i][j] = dataRecv[i * N + j];
+                }
             }
             count++;
         }
         free(dataRecv);
     }
     else{
+        long *dataSend = (long*) malloc(sizeof(long*) * N * jobs);
+        int count = 0;
         for (int i = rank*jobs-jobs; i < rank*jobs; ++i)
-        {
+        {   
             dijkstra(graph, i);
+            for (int j = 0; j < N; j++) {
+                dataSend[count * N + j] = graph[i][j];
+            }
+            count++;
             // printf("Print job %d from rank %d\n", i, rank);
         }
-        MPI_Send(graph[rank*jobs-jobs], N*jobs, MPI_LONG, destinationRank, tag, MPI_COMM_WORLD);
+        MPI_Send(dataSend, N*jobs, MPI_LONG, destinationRank, tag, MPI_COMM_WORLD);
+        free(dataSend);
     }
     
     MPI_Barrier(MPI_COMM_WORLD);
     end_time = MPI_Wtime();
     total_time = end_time - start_time;
-    MPI_Finalize();
+    
     if (rank == 0) {
         printf("%f\n", total_time);
+        // Write to file
+        FILE *f = fopen("output.txt", "w");
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                fprintf(f, "%ld ", graph[i][j]);
+            }
+            fprintf(f, "\n");
+        }
+        fclose(f);
     }
+
     for (int i = 0; i < N; ++i)
     {
         free(graph[i]);
     }
     free(graph);
+
+    MPI_Finalize();
+
+    return 0;
 }
