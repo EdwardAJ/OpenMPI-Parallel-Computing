@@ -1,1 +1,0 @@
-mpirun -np $1 --hostfile mpi_hostfile asd $2
