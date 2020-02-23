@@ -18,17 +18,17 @@ Beberapa file yang harus ada dalam repositori tersebut diantaranya:
 # Laporan Pengerjaan
 #### Deksripsi Solusi Paralel
 - Setiap proses melakukan satu atau lebih algoritma dijkstra. Jumlah algoritma dijkstra pada setiap proses ditentukan dari jumlah node (N) dan jumlah proses.
-- Contoh:
+Contoh:
 Pada matriks dengan jumlah node (N) = 1000 dan jumlah proses = 6, **terdapat 1 proses yang menjadi main process** dan **5 proses lainnya yang melakukan algoritma dijkstra.** Oleh karena itu, terdapat 1000 / 5 = 200 kali algoritma dijkstra yang akan dijalankan setiap proses. 
--- **Proses dengan rank (id proses) = 0 menjadi main process**
--- **Proses dengan rank = 1 hingga proses dengan rank = 5 menjadi proses yang menjalankan algoritma dijkstra:**
+- **Proses dengan rank (id proses) = 0 menjadi main process**
+- **Proses dengan rank = 1 hingga proses dengan rank = 5 menjadi proses yang menjalankan algoritma dijkstra:**
   - Proses dengan rank = 1 menjalankan algoritma dijkstra dengan node asal 0 hingga 199.
   - Proses dengan rank = 2 menjalankan algoritma dijkstra dengan node asal 200 sampai 399.
   - Proses dengan rank = 3 menjalankan algoritma dijkstra dengan node asal 400 sampai 599.
   - Proses dengan rank = 4 menjalankan algoritma dijkstra dengan node asal 600 sampai 799.
-  - Proses dengan rank = 5 menjalankan algoritma dijkstra dengan node asal 800 sampai 999. 
+  - Proses dengan rank = 5 menjalankan algoritma dijkstra dengan node asal 800 sampai 999.
    
-  -- **Main process menyatukan semua hasil dari algoritma dijkstra setelah proses dengan rank = 1 sampai proses dengan rank = 5 selesai menjalankan tugasnya.**
+- **Main process menyatukan semua hasil dari algoritma dijkstra setelah proses dengan rank = 1 sampai proses dengan rank = 5 selesai menjalankan tugasnya.**
 
 #### Analisis Solusi Paralel
 Program paralel diawali dengan beberapa baris kode:
@@ -103,21 +103,26 @@ Sebenarnya terdapat solusi yang lebih cepat, yaitu dengan meng-assign setiap pro
 #### Pengukuran Kinerja untuk tiap Kasus Uji
 Berikut adalah hasil pengujian yang dikerjakan pada server 13517115@167.205.35.150:
 - **N = 100**
-  | Tipe  |  Percobaan 1 | Percobaan 2  | Percobaan 3  |
-  |---|---|---|---|
-  | Serial |  0.012495 s |  0.013546 s |  0.013202 s |
-  | Paralel  |  0.011397 s | 0.009392 s  | 0.011365 s |
+
+  | Tipe | Percobaan 1 | Percobaan 2 | Percobaan 3 |
+  |---|--- |---|---|
+  | Serial   | 0.012495 s   | 0.013546 s    | 0.013202 s|
+  | Paralel | 0.011397 s | 0.009392 s | 0.011365 s|
+
 - **N = 500**
+
   | Tipe  |  Percobaan 1 | Percobaan 2  | Percobaan 3  |
   |---|---|---|---|
   | Serial |  1.637802 s  |  1.531207 s |  1.663832 s |
   | Paralel  |  1.567543 s | 1.368517 s  |  1.004626 s |
 - **N = 1000**
+
   | Tipe  |  Percobaan 1 | Percobaan 2  | Percobaan 3  |
   |---|---|---|---|
   | Serial | 13.642516 s | 14.617350 s | 14.184775 s  |
   | Paralel  | 4.268241 s  |  5.128194 s | 4.290042 s|
 - **N = 3000**
+
   | Tipe  |  Percobaan 1 | Percobaan 2  | Percobaan 3  |
   |---|---|---|---|
   | Serial | 480.282249 s  |  481.598290 s |  396.111461 s|
