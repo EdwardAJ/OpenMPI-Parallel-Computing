@@ -84,6 +84,7 @@ Singkatnya, setiap proses menjalankan fungsi dijkstra. Fungsi dijkstra mengubah 
 `MPI_Send` digunakan untuk mengirim data berupa jarak terpendek dari node yang dikerjakan ke semua node dan diterima oleh `MPI_Recv` pada proses dengan rank = 0.
 
 Sebenarnya terdapat solusi yang lebih cepat, yaitu dengan meng-assign setiap process untuk mengambil task lain ketika process tersebut sudah selesai, bukan dengan membagi task di awal. Hal ini mungkin dengan menggunakan `pragma omp task`, namun use casenya pada shared memory model.
+Selain itu, alokasi matriks seharusnya dilakukan hanya dilakukan satu kali (tidak secara berulang-ulang) agar array menjadi kontigu. Dengan kata lain, seharusnya representasi matriks adalah array 1 dimensi, bukan 2 dimensi.
 
 #### Jumlah Thread yang Digunakan
 - Terdapat enam proses yang digunakan pada program ini.
