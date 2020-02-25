@@ -66,7 +66,7 @@ Variabel `count` digunakan untuk menghitung jumlah proses yang sudah selesai men
 
 Berikut adalah kode program jika rank proses bukan 0:
 
-    long *dataSend = (long*) malloc(sizeof(long*) * N * jobs);
+        long *dataSend = (long*) malloc(sizeof(long*) * N * jobs);
         int count = 0;
         for (int i = rank*jobs-jobs; i < rank*jobs; ++i)
         {   
