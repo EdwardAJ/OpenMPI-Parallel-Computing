@@ -75,7 +75,6 @@ Berikut adalah kode program jika rank proses bukan 0:
                 dataSend[count * N + j] = graph[i][j];
             }
             count++;
-            // printf("Print job %d from rank %d\n", i, rank);
         }
         MPI_Send(dataSend, N*jobs, MPI_LONG, destinationRank, tag, MPI_COMM_WORLD);
         free(dataSend);
