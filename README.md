@@ -1,14 +1,3 @@
-# Announcement
-
-Beberapa file yang harus ada dalam repositori tersebut diantaranya:
-* Direktori src yang berisi source code yang anda buat.
-* File output yang berisi hasil uji dijkstra algorithm pada data uji.
-* Makefile. Buatlah sehingga kompilasi program dapat dilakukan hanya dengan pemanggilan command ’make’ saja.
-* File README.md yang berisi:
-    * Petunjuk penggunaan program.
-    * Pembagian tugas. Sampaikan dalam list pengerjaan untuk setiap mahasiswa. Sebagai contoh: XXXX mengerjakan fungsi YYYY, ZZZZ, dan YYZZ.
-    * Laporan pengerjaan, dengan struktur laporan sesuai dengan deskripsi pada bagian sebelumnya.
-    
 # Petunjuk Penggunaan Program
 
 # Pembagian Tugas
@@ -16,7 +5,7 @@ Beberapa file yang harus ada dalam repositori tersebut diantaranya:
 - Edward Alexander jaya (13517115) mengerjakan fungsi dijkstra serial, fungsi untuk memparalelkan dijkstra, dan fungsi file eksternal, serta pengujian pada server.
 
 # Laporan Pengerjaan
-#### Deksripsi Solusi Paralel
+#### Deskripsi Solusi Paralel
 - Setiap proses melakukan satu atau lebih algoritma dijkstra. Jumlah algoritma dijkstra pada setiap proses ditentukan dari jumlah node (N) dan jumlah proses.
 Contoh:
 Pada matriks dengan jumlah node (N) = 1000 dan jumlah proses = 6, **terdapat 1 proses yang menjadi main process** dan **5 proses lainnya yang melakukan algoritma dijkstra.** Oleh karena itu, terdapat 1000 / 5 = 200 kali algoritma dijkstra yang akan dijalankan setiap proses. 
@@ -106,27 +95,27 @@ Berikut adalah hasil pengujian yang dikerjakan pada server 13517115@167.205.35.1
 
   | Tipe | Percobaan 1 | Percobaan 2 | Percobaan 3 |
   |---|--- |---|---|
-  | Serial   | 0.012495 s   | 0.013546 s    | 0.013202 s|
-  | Paralel | 0.011397 s | 0.009392 s | 0.011365 s|
+  | Serial   | 12495 µs   | 13546 µs    | 13202 µs|
+  | Paralel | 11397 µs | 9392 µs | 11365 µs|
 
 - **N = 500**
 
   | Tipe  |  Percobaan 1 | Percobaan 2  | Percobaan 3  |
   |---|---|---|---|
-  | Serial |  1.637802 s  |  1.531207 s |  1.663832 s |
-  | Paralel  |  1.567543 s | 1.368517 s  |  1.004626 s |
+  | Serial |  1637802 µs  |  1531207 µs |  1663832 µs |
+  | Paralel  |  1567543 µs | 1368517 µs  |  1004626 µs |
 - **N = 1000**
 
   | Tipe  |  Percobaan 1 | Percobaan 2  | Percobaan 3  |
   |---|---|---|---|
-  | Serial | 13.642516 s | 14.617350 s | 14.184775 s  |
-  | Paralel  | 4.268241 s  |  5.128194 s | 4.290042 s|
+  | Serial | 13642516 µs | 14617350 µs | 14184775 µs  |
+  | Paralel  | 4268241 µs  |  5128194 µs | 4290042 µs|
 - **N = 3000**
 
   | Tipe  |  Percobaan 1 | Percobaan 2  | Percobaan 3  |
   |---|---|---|---|
-  | Serial | 480.282249 s  |  481.598290 s |  396.111461 s|
-  | Paralel  | 278.312732 s | 308.372772 s |  198.770362 s|
+  | Serial | 480282249 µs  |  481598290 µs |  396111461 µs|
+  | Paralel  | 278312732 µs | 308372772 µs |  198770362 µs|
 
 #### Analisis Perbandingan Kinerja Serial dan Paralel
 - Pada program serial, proses yang dijalankan hanya satu. Pada program paralel, terdapat enam proses yang dijalankan. Seharusnya kecepatan program paralel adalah `6-1 = 5` kali lebih cepat daripada program serial. Namun pada program paralel, semua proses harus disinkronisasi ( atau join ) dan hal tersebut memakan waktu cukup besar. Secara detail, jika satu proses sudah selesai menjalankan tugasnya, proses tersebut akan mengirimkan `MPI_RECV` dan proses dengan rank = 0 akan menerima `MPI_SEND`. Setelah itu, proses tersebut diblok untuk melanjutkan program oleh `MPI_BARRIER` sampai semua proses lainnya selesai dijalankan. Karena waktu pemblokiran tersebut bisa bervariasi tergantung proses, maka faktor ini juga harus dipertimbangkan.
