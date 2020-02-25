@@ -146,7 +146,7 @@ int main(int argc, char *argv[]) {
     total_time = end_time - start_time;
     
     if (rank == 0) {
-        printf("%f\n", total_time);
+        printf("%f µs\n", total_time*100000);
         // Write to file
         FILE *f = fopen("output.txt", "w");
         for (int i = 0; i < N; i++) {

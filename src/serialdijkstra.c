@@ -106,9 +106,9 @@ int main(int argc, char *argv[]) {
     }
 
     time = clock() - time;
-    double time_taken = ((double)time)/CLOCKS_PER_SEC; // in seconds
+    double time_taken = ((double)time); // in seconds
 
-    printf("took %f seconds to execute \n", time_taken);
+    printf("%f µs\n", time_taken);
   
 
     FILE *f = fopen("output.txt", "w");
